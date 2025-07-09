@@ -1,10 +1,11 @@
+
 import styled, { keyframes } from "styled-components";
 
 // Animation keyframes
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -12,151 +13,103 @@ const fadeIn = keyframes`
   }
 `;
 
-const pulse = keyframes`
-  0% {
-    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0);
-  }
-`;
-
 // Container
 export const DashboardContainer = styled.div`
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
 
   @media (max-width: 768px) {
-    padding: 15px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 10px;
+    padding: 1rem;
   }
 `;
 
 // Grid Layout
 export const DashboardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 `;
 
 // Card Component
 export const DashboardCard = styled.div`
-  background: rgba(255, 255, 255, 0.95);
+  background: ${({ theme }) => theme.cardBackground};
   backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-  animation: ${fadeIn} 0.6s ease-out;
+  gap: 1.5rem;
+  box-shadow: ${({ theme }) => theme.shadow};
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  animation: ${fadeIn} 0.4s ease-out;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: ${(props) => {
-      switch (props.color || "primary") {
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: ${({ theme, color }) => {
+      switch (color) {
         case "success":
-          return "linear-gradient(45deg, #48bb78, #38a169)";
+          return `linear-gradient(to right, ${theme.success}, ${theme.primary})`;
         case "warning":
-          return "linear-gradient(45deg, #ed8936, #dd6b20)";
+          return `linear-gradient(to right, ${theme.warning}, ${theme.error})`;
         case "error":
-          return "linear-gradient(45deg, #f56565, #e53e3e)";
+          return `linear-gradient(to right, ${theme.error}, ${theme.warning})`;
         case "info":
-          return "linear-gradient(45deg, #4299e1, #3182ce)";
+          return `linear-gradient(to right, ${theme.primary}, ${theme.success})`;
         default:
-          return "linear-gradient(45deg, #4299e1, #3182ce)";
+          return `linear-gradient(to right, ${theme.primary}, ${theme.success})`;
       }
     }};
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
   }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    animation: ${pulse} 2s infinite;
-  }
-
-  @media (max-width: 768px) {
-    padding: 20px;
-    gap: 16px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 16px;
-    gap: 12px;
-    flex-direction: column;
-    text-align: center;
+    transform: translateY(-5px);
+    box-shadow: ${({ theme }) => theme.shadowHover};
+    &::before {
+      opacity: 1;
+    }
   }
 `;
 
 // Icon Container
 export const CardIcon = styled.div`
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
-  background: ${(props) => {
-    switch (props.color) {
+  background: ${({ theme, color }) => {
+    switch (color) {
       case "success":
-        return "linear-gradient(45deg, #48bb78, #38a169)";
+        return theme.success;
       case "warning":
-        return "linear-gradient(45deg, #ed8936, #dd6b20)";
+        return theme.warning;
       case "error":
-        return "linear-gradient(45deg, #f56565, #e53e3e)";
+        return theme.error;
       case "info":
-        return "linear-gradient(45deg, #4299e1, #3182ce)";
+        return theme.primary;
       default:
-        return "linear-gradient(45deg, #4299e1, #3182ce)";
+        return theme.primary;
     }
   }};
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
-    width: 56px;
-    height: 56px;
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-  }
 `;
 
 // Content Container
@@ -164,130 +117,77 @@ export const CardContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-
-  @media (max-width: 480px) {
-    gap: 4px;
-  }
+  gap: 0.25rem;
 `;
 
 // Card Title
 export const CardTitle = styled.h3`
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #4a5568;
-  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.textSecondary};
   text-transform: uppercase;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 13px;
-  }
 `;
 
 // Card Value
 export const CardValue = styled.p`
   margin: 0;
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
-  line-height: 1.2;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 20px;
-  }
+  color: ${({ theme }) => theme.text};
 `;
 
 // Card Subtitle
 export const CardSubtitle = styled.span`
-  font-size: 12px;
-  color: ${(props) => {
-    switch (props.color) {
+  font-size: 0.8rem;
+  color: ${({ theme, color }) => {
+    switch (color) {
       case "success":
-        return "#38a169";
+        return theme.success;
       case "warning":
-        return "#dd6b20";
+        return theme.warning;
       case "error":
-        return "#e53e3e";
+        return theme.error;
       case "info":
-        return "#3182ce";
+        return theme.primary;
       default:
-        return "#718096";
+        return theme.textMuted;
     }
   }};
   font-weight: 500;
-  margin-top: 4px;
-
-  @media (max-width: 480px) {
-    font-size: 11px;
-  }
 `;
 
 // Additional Info Grid
 export const AdditionalInfoGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  max-width: 1200px;
-  margin: 24px auto 0;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    margin-top: 20px;
-  }
+  gap: 1.5rem;
 `;
 
 // Info Card
 export const InfoCard = styled.div`
-  background: rgba(255, 255, 255, 0.95);
+  background: ${({ theme }) => theme.cardBackground};
   backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-  animation: ${fadeIn} 0.8s ease-out;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  }
-
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: ${({ theme }) => theme.shadow};
+  border: 1px solid ${({ theme }) => theme.border};
+  animation: ${fadeIn} 0.6s ease-out;
 `;
 
 // Info Card Header
 export const InfoCardHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  color: #4a5568;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.text};
   font-weight: 600;
-  font-size: 16px;
+  font-size: 1.1rem;
 
   svg {
-    color: #4299e1;
-    font-size: 18px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-
-    svg {
-      font-size: 16px;
-    }
+    color: ${({ theme }) => theme.primary};
+    font-size: 1.25rem;
   }
 `;
 
@@ -295,7 +195,7 @@ export const InfoCardHeader = styled.div`
 export const InfoCardContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 `;
 
 // Info Row
@@ -303,27 +203,16 @@ export const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-
-  &:last-child {
-    border-bottom: none;
-  }
 
   span {
-    color: #718096;
-    font-size: 14px;
+    color: ${({ theme }) => theme.textSecondary};
+    font-size: 0.9rem;
   }
 
   strong {
-    color: #2d3748;
+    color: ${({ theme }) => theme.text};
     font-weight: 600;
-  }
-
-  @media (max-width: 768px) {
-    span {
-      font-size: 13px;
-    }
+    font-size: 1rem;
   }
 `;
 
@@ -331,10 +220,9 @@ export const InfoRow = styled.div`
 export const CollectionBar = styled.div`
   width: 100%;
   height: 8px;
-  background: #e2e8f0;
+  background: ${({ theme }) => theme.inputBackground};
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 8px;
 `;
 
 // Collection Progress
@@ -342,67 +230,26 @@ export const CollectionProgress = styled.div`
   height: 100%;
   width: ${(props) => props.width}%;
   background: ${(props) => props.color};
-  transition: width 1s ease-in-out;
+  transition: width 0.5s ease-in-out;
   border-radius: 4px;
 `;
 
 // Occupancy Rate
 export const OccupancyRate = styled.div`
   text-align: center;
-  padding: 16px 0;
+  padding: 1rem 0;
 `;
 
 // Occupancy Number
 export const OccupancyNumber = styled.div`
-  font-size: 36px;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #4299e1;
-  margin-bottom: 8px;
-
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
+  color: ${({ theme }) => theme.primary};
+  margin-bottom: 0.5rem;
 `;
 
 // Occupancy Text
 export const OccupancyText = styled.div`
-  font-size: 14px;
-  color: #718096;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
+  font-size: 1rem;
+  color: ${({ theme }) => theme.textSecondary};
 `;
-
-// Additional styling for specific card types
-export const SuccessCard = styled(DashboardCard)`
-  &::before {
-    background: linear-gradient(45deg, #48bb78, #38a169);
-  }
-`;
-
-export const WarningCard = styled(DashboardCard)`
-  &::before {
-    background: linear-gradient(45deg, #ed8936, #dd6b20);
-  }
-`;
-
-export const ErrorCard = styled(DashboardCard)`
-  &::before {
-    background: linear-gradient(45deg, #f56565, #e53e3e);
-  }
-`;
-
-export const InfoCardBlue = styled(DashboardCard)`
-  &::before {
-    background: linear-gradient(45deg, #4299e1, #3182ce);
-  }
-`;
-
-// Responsive breakpoints
-export const breakpoints = {
-  mobile: "480px",
-  tablet: "768px",
-  desktop: "1024px",
-  large: "1200px",
-};

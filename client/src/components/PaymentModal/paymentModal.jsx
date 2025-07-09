@@ -58,7 +58,10 @@ const PaymentModal = ({ tenant, onClose, onMarkPaid, onMarkUnpaid }) => {
               <PaymentCell>Actions</PaymentCell>
             </PaymentHeader>
 
-            {tenant.payments.map((payment) => (
+            {tenant.payments
+            .filter((payment) => new Date(payment.dueDate) < new Date())
+            .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)) // Sort by oldest first
+            .map((payment) => (
               <PaymentRow key={payment._id}>
                 <PaymentCell>{payment.month}</PaymentCell>
                 <PaymentCell>{formatDate(payment.dueDate)}</PaymentCell>

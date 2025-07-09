@@ -20,11 +20,12 @@ export const ModalOverlay = styled.div`
   right: 0;
   bottom: 0;
   background: ${({ theme }) => theme.modalOverlay};
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
 `;
 
 export const ModalContent = styled.div`
   background: ${({ theme }) => theme.cardBackground};
+  backdrop-filter: blur(10px);
   border-radius: 12px;
   box-shadow: ${({ theme }) => theme.shadowHover};
   border: 1px solid ${({ theme }) => theme.border};
@@ -34,38 +35,33 @@ export const ModalContent = styled.div`
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-
-  @media (max-width: 768px) {
-    max-width: 95%;
-    margin: 0 auto;
-  }
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ModalHeader = styled.div`
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.border};
 `;
 
 export const ModalTitle = styled.h2`
   color: ${({ theme }) => theme.text};
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
-  padding-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    font-size: 1.3rem;
-  }
 `;
 
 export const ModalBody = styled.div`
   padding: 1.5rem;
+  overflow-y: auto;
 `;
 
 export const ModalActions = styled.div`
-  padding: 0 1.5rem 1.5rem 1.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid ${({ theme }) => theme.border};
   display: flex;
   justify-content: flex-end;
+  gap: 0.75rem;
 `;
 
 export const FormGroup = styled.div`
@@ -74,7 +70,7 @@ export const FormGroup = styled.div`
 
 export const Label = styled.label`
   display: block;
-  color: ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.textSecondary};
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
@@ -86,17 +82,17 @@ export const Required = styled.span`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   border: 1px solid ${({ theme }) => theme.inputBorder};
-  border-radius: 6px;
+  border-radius: 8px;
   background: ${({ theme }) => theme.inputBackground};
   color: ${({ theme }) => theme.text};
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
 
   &:focus {
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}40;
   }
 
   &::placeholder {
@@ -107,21 +103,16 @@ export const Input = styled.input`
 export const ButtonGroup = styled.div`
   display: flex;
   gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    width: 100%;
-  }
 `;
 
 export const Button = styled.button`
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in-out;
 
   ${({ type, theme }) => {
     switch (type) {
@@ -129,45 +120,43 @@ export const Button = styled.button`
         return `
           background: ${theme.primary};
           color: white;
+          border-color: ${theme.primary};
           &:hover {
             background: ${theme.primaryHover};
+            border-color: ${theme.primaryHover};
           }
         `;
       case "secondary":
         return `
-          background: ${theme.inputBackground};
+          background: ${theme.cardBackground};
           color: ${theme.text};
-          border: 1px solid ${theme.border};
+          border-color: ${theme.border};
           &:hover {
-            background: ${theme.border};
+            background: ${theme.inputBackground};
           }
         `;
       case "error":
         return `
           background: ${theme.error};
           color: white;
+          border-color: ${theme.error};
           &:hover {
             background: ${theme.errorHover};
+            border-color: ${theme.errorHover};
           }
         `;
       default:
         return `
           background: ${theme.primary};
           color: white;
+          border-color: ${theme.primary};
           &:hover {
             background: ${theme.primaryHover};
+            border-color: ${theme.primaryHover};
           }
         `;
     }
   }}
-
-  &:active {
-    transform: translateY(1px);
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.875rem 1.5rem;
-  }
 `;
 
 export const DeleteMessage = styled.p`
@@ -175,4 +164,5 @@ export const DeleteMessage = styled.p`
   font-size: 1rem;
   line-height: 1.5;
   margin: 0;
+  text-align: center;
 `;
