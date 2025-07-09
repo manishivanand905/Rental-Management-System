@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 
 dotenv.config();
 
+console.log('Client URL:', process.env.CLIENT_URL);
+
 connectDB();
 
 const app = express();
