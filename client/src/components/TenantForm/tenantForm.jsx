@@ -13,6 +13,7 @@ import {
   Button,
   ButtonGroup,
   Required,
+  FormGrid, // Added FormGrid
 } from "./tenantFormStyles";
 
 const TenantForm = ({ tenant, onSave, onCancel }) => {
@@ -82,13 +83,7 @@ const TenantForm = ({ tenant, onSave, onCancel }) => {
 
         <ModalBody>
           <form onSubmit={handleSubmit}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "1rem",
-              }}
-            >
+            <FormGrid>
               <FormGroup>
                 <Label>
                   Room No. <Required>*</Required>
@@ -189,7 +184,7 @@ const TenantForm = ({ tenant, onSave, onCancel }) => {
                   onChange={handleChange}
                 />
               </FormGroup>
-            </div>
+            </FormGrid>
           </form>
         </ModalBody>
 

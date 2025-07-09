@@ -10,6 +10,18 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    font-size: 16px; /* Base font size */
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+      font-size: 15px;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+      font-size: 14px;
+    }
+  }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -20,9 +32,15 @@ export const GlobalStyles = createGlobalStyle`
     background-image: url('https://images.unsplash.com/photo-1507525428034-b723a9ce6890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: fixed; /* Default for larger screens */
     color: ${({ theme }) => theme.text};
     transition: background-color 0.3s ease, color 0.3s ease;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+      background-attachment: scroll; /* Change to scroll on small screens */
+      background-image: none; /* Optionally remove background image on very small screens */
+      background-color: ${({ theme }) => theme.background}; /* Ensure background color is visible */
+    }
   }
 
   #root {

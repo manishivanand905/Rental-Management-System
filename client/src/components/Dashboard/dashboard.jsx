@@ -28,7 +28,7 @@ import {
 } from "./dashboardStyles";
 
 const Dashboard = ({ tenants }) => {
-  const totalRooms = 10;
+  const totalRooms = 9;
   const occupiedRooms = tenants.filter(
     (tenant) => tenant.status === "Active"
   ).length;

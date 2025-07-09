@@ -101,17 +101,20 @@ const TenantManagement = ({
         </EmptyState>
       ) : (
         <CardsContainer>
-          {tenants.map((tenant) => (
-            <TenantCard key={tenant._id}>
-              <CardHeader>
-                <RoomNumber>
-                  <FontAwesomeIcon icon={faHome} />
-                  Room {tenant.roomNo}
-                </RoomNumber>
-                <StatusBadge status={tenant.status}>
-                  {tenant.status}
-                </StatusBadge>
-              </CardHeader>
+          {tenants
+            .slice() // Create a shallow copy to avoid modifying the original prop
+            .sort((a, b) => a.roomNo - b.roomNo) // Sort by roomNo in ascending order
+            .map((tenant) => (
+              <TenantCard key={tenant._id}>
+                <CardHeader>
+                  <RoomNumber>
+                    <FontAwesomeIcon icon={faHome} />
+                    Room {tenant.roomNo}
+                  </RoomNumber>
+                  <StatusBadge status={tenant.status}>
+                    {tenant.status}
+                  </StatusBadge>
+                </CardHeader>
 
               <TenantName>{tenant.name}</TenantName>
 

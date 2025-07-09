@@ -60,19 +60,19 @@ const PaymentModal = ({ tenant, onClose, onMarkPaid, onMarkUnpaid }) => {
 
             {tenant.payments
             .filter((payment) => new Date(payment.dueDate) < new Date())
-            .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)) // Sort by oldest first
+            .sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate)) // Sort by newest first
             .map((payment) => (
               <PaymentRow key={payment._id}>
-                <PaymentCell>{payment.month}</PaymentCell>
-                <PaymentCell>{formatDate(payment.dueDate)}</PaymentCell>
-                <PaymentCell>₹{payment.amount.toLocaleString()}</PaymentCell>
-                <PaymentCell>
+                <PaymentCell data-label="Month/Year">{payment.month}</PaymentCell>
+                <PaymentCell data-label="Due Date">{formatDate(payment.dueDate)}</PaymentCell>
+                <PaymentCell data-label="Amount">₹{payment.amount.toLocaleString()}</PaymentCell>
+                <PaymentCell data-label="Status">
                   <PaymentStatus status={payment.status}>
                     {payment.status}
                   </PaymentStatus>
                 </PaymentCell>
-                <PaymentCell>{formatDate(payment.paidDate)}</PaymentCell>
-                <PaymentCell>
+                <PaymentCell data-label="Paid Date">{formatDate(payment.paidDate)}</PaymentCell>
+                <PaymentCell data-label="Actions">
                   <PaymentActions>
                     {payment.status === "Unpaid" ? (
                       <PaymentButton

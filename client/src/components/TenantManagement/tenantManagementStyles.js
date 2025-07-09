@@ -12,6 +12,13 @@ const shine = keyframes`
   100% { background-position: 200% 0; }
 `;
 
+// Keyframes for pulsating glow
+const pulseGlow = keyframes`
+  0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+`;
+
 // Base styles for buttons
 const buttonBase = css`
   display: inline-flex;
@@ -55,14 +62,20 @@ export const TenantTitle = styled.h2`
 
 export const AddButton = styled.button`
   ${buttonBase}
-  background: ${({ theme }) => theme.primary};
+  background: linear-gradient(45deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.primaryHover});
   color: white;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 50px; /* More curved */
+  padding: 0.4rem 1rem; /* Decreased padding */
 
   &:hover {
-    background: ${({ theme }) => theme.primaryHover};
+    background: linear-gradient(45deg, ${({ theme }) => theme.primaryHover}, ${({ theme }) => theme.primary});
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  svg {
+    font-size: 0.9em; /* Decreased icon size */
   }
 `;
 
@@ -70,6 +83,16 @@ export const CardsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: 1fr; /* Single column on small screens */
+    gap: 1rem;
+  }
 `;
 
 export const TenantCard = styled.div`
@@ -83,6 +106,10 @@ export const TenantCard = styled.div`
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: ${fadeIn} 0.5s ease-out;
   border: 1px solid ${({ theme }) => theme.border};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 1rem; /* Reduced padding for small screens */
+  }
 
   &:hover {
     transform: translateY(-10px) rotate(1deg);
@@ -104,6 +131,10 @@ export const RoomNumber = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1rem; /* Smaller font size for small screens */
+  }
 `;
 
 export const StatusBadge = styled.span`
@@ -123,6 +154,10 @@ export const TenantName = styled.h3`
   font-size: 1.6rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.4rem; /* Smaller font size for small screens */
+  }
 `;
 
 export const CardDetails = styled.div`
@@ -175,6 +210,10 @@ export const RentValue = styled.div`
   color: ${({ theme }) => theme.primary};
   font-size: 1.8rem;
   font-weight: 700;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.6rem; /* Smaller font size for small screens */
+  }
 `;
 
 export const ActionGroup = styled.div`
@@ -186,18 +225,27 @@ export const ActionGroup = styled.div`
 
 export const ActionButton = styled.button.attrs((props) => ({
   style: {
-    background: `linear-gradient(45deg, ${props.theme[props.color]} 0%, ${props.theme[props.color + "Hover"]} 100%)`,
+    background: `linear-gradient(135deg, ${props.theme[props.color]} 20%, ${props.theme[props.color + "Hover"
+    ]} 100%)`, /* Even higher opacity for darker vibrancy */
   },
 }))`
   ${buttonBase}
-  color: white;
+  color: white; /* Revert text color to white */
   flex: 1;
   position: relative;
   overflow: hidden;
+  border-radius: 50px; /* More curved */
+  padding: 0.5rem 1rem; /* Decreased padding */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Stronger default shadow */
+  transition: all 0.3s ease-in-out;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Stronger text shadow for white text */
+  border: 1px solid ${({ theme }) => theme.border}; /* Add a subtle border */
 
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px) scale(1.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger pronounced shadow */
+    border: 1px solid rgba(255, 255, 255, 0.7); /* More visible white border on hover */
+    animation: ${pulseGlow} 1.5s infinite alternate;
   }
 
   &::before {
@@ -210,10 +258,15 @@ export const ActionButton = styled.button.attrs((props) => ({
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0.4), /* More visible shine */
       transparent
     );
     animation: ${shine} 3s infinite;
+  }
+
+  svg {
+    font-size: 0.9em; /* Decreased icon size */
+    color: white; /* Revert icon color to white */
   }
 `;
 

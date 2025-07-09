@@ -13,8 +13,14 @@ export const HeaderContainer = styled.header`
   z-index: 100;
   transition: all 0.3s ease;
 
-  @media (max-width: 768px) {
-    padding: 1rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.8rem 1rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    flex-direction: column;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem; /* Add some space between stacked items */
   }
 `;
 
@@ -23,6 +29,14 @@ export const HeaderTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const ThemeToggle = styled.button`
@@ -45,6 +59,15 @@ export const ThemeToggle = styled.button`
 
   svg {
     font-size: 1.2rem;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 35px;
+    height: 35px;
   }
 `;
 
@@ -52,4 +75,8 @@ export const UserInfo = styled.span`
   color: ${({ theme }) => theme.textSecondary};
   font-size: 0.9rem;
   font-weight: 500;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 0.8rem;
+  }
 `;

@@ -32,11 +32,30 @@ export const ModalContent = styled.div`
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Default max-width */
   max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    max-width: 95%; /* More flexible max-width for small screens */
+    margin: 0 1rem; /* Add some horizontal margin */
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    max-width: 98%; /* Even more flexible for extra small screens */
+    margin: 0 0.5rem;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -54,6 +73,23 @@ export const ModalTitle = styled.h2`
 export const ModalBody = styled.div`
   padding: 1.5rem;
   overflow-y: auto;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 1rem; /* Reduced padding for small screens */
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    padding: 0.8rem; /* Further reduced padding for extra small screens */
+  }
 `;
 
 export const ModalActions = styled.div`
@@ -103,6 +139,16 @@ export const Input = styled.input`
 export const ButtonGroup = styled.div`
   display: flex;
   gap: 0.75rem;
+`;
+
+export const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: 1fr; /* Single column on small screens */
+  }
 `;
 
 export const Button = styled.button`

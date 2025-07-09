@@ -17,8 +17,16 @@ const fadeIn = keyframes`
 export const DashboardContainer = styled.div`
   padding: 2rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 1rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    padding: 0.8rem;
   }
 `;
 
@@ -28,6 +36,16 @@ export const DashboardGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: 1fr; /* Single column on small screens */
+    gap: 1rem;
+  }
 `;
 
 // Card Component
@@ -44,6 +62,13 @@ export const DashboardCard = styled.div`
   overflow: hidden;
   transition: all 0.3s ease-in-out;
   animation: ${fadeIn} 0.4s ease-out;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    flex-direction: column; /* Stack icon and content vertically */
+    text-align: center;
+    padding: 1rem;
+    gap: 0.8rem;
+  }
 
   &::before {
     content: '';
@@ -127,6 +152,10 @@ export const CardTitle = styled.h3`
   font-weight: 500;
   color: ${({ theme }) => theme.textSecondary};
   text-transform: uppercase;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 0.8rem;
+  }
 `;
 
 // Card Value
@@ -135,6 +164,10 @@ export const CardValue = styled.p`
   font-size: 1.75rem;
   font-weight: 700;
   color: ${({ theme }) => theme.text};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.5rem;
+  }
 `;
 
 // Card Subtitle
@@ -155,6 +188,10 @@ export const CardSubtitle = styled.span`
     }
   }};
   font-weight: 500;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 0.7rem;
+  }
 `;
 
 // Additional Info Grid
@@ -162,6 +199,16 @@ export const AdditionalInfoGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: 1fr; /* Single column on small screens */
+    gap: 1rem;
+  }
 `;
 
 // Info Card
@@ -246,10 +293,18 @@ export const OccupancyNumber = styled.div`
   font-weight: 700;
   color: ${({ theme }) => theme.primary};
   margin-bottom: 0.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 2rem;
+  }
 `;
 
 // Occupancy Text
 export const OccupancyText = styled.div`
   font-size: 1rem;
   color: ${({ theme }) => theme.textSecondary};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 0.9rem;
+  }
 `;

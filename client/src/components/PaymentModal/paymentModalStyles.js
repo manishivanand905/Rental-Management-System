@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 
 export const Modal = styled.div`
@@ -55,6 +54,15 @@ export const ModalTitle = styled.h2`
 export const ModalBody = styled.div`
   padding: 1.5rem;
   overflow-y: auto;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const ModalActions = styled.div`
@@ -121,6 +129,14 @@ export const Button = styled.button`
 
 export const PaymentTable = styled.div`
   overflow-x: auto;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const PaymentHeader = styled.div`
@@ -134,6 +150,10 @@ export const PaymentHeader = styled.div`
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.5px;
+
+  @media (max-width: 768px) {
+    display: none; /* Hide header on small screens */
+  }
 `;
 
 export const PaymentRow = styled.div`
@@ -144,6 +164,14 @@ export const PaymentRow = styled.div`
   &:last-child {
     border-bottom: none;
   }
+
+  @media (max-width: 768px) {
+    display: block; /* Stack items vertically */
+    margin-bottom: 1rem;
+    border: 1px solid ${({ theme }) => theme.border};
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
 `;
 
 export const PaymentCell = styled.div`
@@ -152,6 +180,24 @@ export const PaymentCell = styled.div`
   font-size: 0.9rem;
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed ${({ theme }) => theme.border};
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &::before {
+      content: attr(data-label) ":";
+      font-weight: 600;
+      color: ${({ theme }) => theme.textSecondary};
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 export const PaymentStatus = styled.span`
