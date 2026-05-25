@@ -2,66 +2,57 @@ import styled from "styled-components";
 
 export const Modal = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
+  z-index: 82;
+  display: grid;
+  place-items: center;
   padding: 1rem;
 `;
 
 export const ModalOverlay = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: ${({ theme }) => theme.modalOverlay};
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(12px);
 `;
 
 export const ModalContent = styled.div`
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.shadowHover};
-  border: 1px solid ${({ theme }) => theme.border};
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 400px;
-  max-height: 90vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  width: min(420px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  border-radius: ${({ theme }) => theme.radii.xl};
+  background: ${({ theme }) => theme.cardBackgroundStrong};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
+  box-shadow: ${({ theme }) => theme.shadows.strong};
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const ModalHeader = styled.div`
-  padding: 1.5rem;
+  padding: 1.4rem 1.5rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.border};
 `;
 
 export const ModalTitle = styled.h2`
+  font-family: "Poppins", sans-serif;
   color: ${({ theme }) => theme.text};
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
+  font-size: 1.3rem;
 `;
 
 export const ModalBody = styled.div`
-  padding: 1.5rem;
-  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
 `;
 
 export const ModalActions = styled.div`
-  padding: 1rem 1.5rem;
-  border-top: 1px solid ${({ theme }) => theme.border};
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  padding: 0 1.5rem 1.4rem;
 `;
 
 export const ButtonGroup = styled.div`
@@ -70,63 +61,29 @@ export const ButtonGroup = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 0.6rem 1.2rem;
+  padding: 0.9rem 1.15rem;
+  border-radius: ${({ theme }) => theme.radii.md};
+  font-weight: 700;
   border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
 
   ${({ type, theme }) => {
-    switch (type) {
-      case "primary":
-        return `
-          background: ${theme.primary};
-          color: white;
-          border-color: ${theme.primary};
-          &:hover {
-            background: ${theme.primaryHover};
-            border-color: ${theme.primaryHover};
-          }
-        `;
-      case "secondary":
-        return `
-          background: ${theme.cardBackground};
-          color: ${theme.text};
-          border-color: ${theme.border};
-          &:hover {
-            background: ${theme.inputBackground};
-          }
-        `;
-      case "error":
-        return `
-          background: ${theme.error};
-          color: white;
-          border-color: ${theme.error};
-          &:hover {
-            background: ${theme.errorHover};
-            border-color: ${theme.errorHover};
-          }
-        `;
-      default:
-        return `
-          background: ${theme.primary};
-          color: white;
-          border-color: ${theme.primary};
-          &:hover {
-            background: ${theme.primaryHover};
-            border-color: ${theme.primaryHover};
-          }
-        `;
+    if (type === "secondary") {
+      return `
+        background: ${theme.surface};
+        color: ${theme.text};
+        border-color: ${theme.border};
+      `;
     }
+
+    return `
+      background: ${theme.gradients.warm};
+      color: #ffffff;
+      box-shadow: ${theme.shadows.soft};
+    `;
   }}
 `;
 
 export const DeleteMessage = styled.p`
-  color: ${({ theme }) => theme.text};
-  font-size: 1rem;
-  line-height: 1.5;
-  margin: 0;
-  text-align: center;
+  color: ${({ theme }) => theme.textSecondary};
+  line-height: 1.7;
 `;

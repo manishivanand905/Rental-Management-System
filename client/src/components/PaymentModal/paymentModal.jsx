@@ -1,107 +1,137 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import {
+  faCalendarDay,
+  faCheck,
+  faXmark,
+  faRotateLeft,
+  faWallet,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  ActionButton,
+  ActionRow,
+  CloseButton,
+  MetricCard,
+  MetricGrid,
   Modal,
-  ModalOverlay,
+  ModalActions,
+  ModalBody,
   ModalContent,
   ModalHeader,
+  ModalOverlay,
   ModalTitle,
-  ModalBody,
-  ModalActions,
-  Button,
-  PaymentTable,
-  PaymentHeader,
-  PaymentRow,
-  PaymentCell,
+  PaymentCard,
+  PaymentGrid,
+  PaymentMeta,
   PaymentStatus,
-  PaymentActions,
-  PaymentButton,
+  PaymentTitle,
 } from "./paymentModalStyles";
+import {
+  formatCurrency,
+  formatDisplayDate,
+  getTenantPaymentState,
+} from "../../utils/tenantInsights";
 
 const PaymentModal = ({ tenant, onClose, onMarkPaid, onMarkUnpaid }) => {
-  const handleMarkPaid = (paymentId) => {
-    onMarkPaid(tenant._id, paymentId);
-  };
+  const paymentState = getTenantPaymentState(tenant);
+  const today = new Date();
+  const payments = (tenant.payments || [])
+    .slice()
+    .sort((left, right) => new Date(left.dueDate) - new Date(right.dueDate));
 
-  const handleMarkUnpaid = (paymentId) => {
-    onMarkUnpaid(tenant._id, paymentId);
-  };
+  const totalPaid = payments
+    .filter((payment) => payment.status === "Paid")
+    .reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
+  const totalPending = payments
+    .filter((payment) => payment.status !== "Paid" && new Date(payment.dueDate) <= today)
+    .reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
 
   return (
     <Modal>
       <ModalOverlay onClick={onClose} />
-      <ModalContent className="scale-in" style={{ maxWidth: "800px" }}>
+      <ModalContent id="payments">
         <ModalHeader>
-          <ModalTitle>
-            Rent Payments for {tenant.name} (Room No: {tenant.roomNo})
-          </ModalTitle>
+          <CloseButton type="button" onClick={onClose} aria-label="Close payments">
+            <FontAwesomeIcon icon={faXmark} />
+          </CloseButton>
+          <div>
+              <ModalTitle>
+                Payments - {tenant.name} - Room {tenant.roomNo}
+              </ModalTitle>
+            <PaymentMeta>{paymentState.detail}</PaymentMeta>
+          </div>
         </ModalHeader>
 
         <ModalBody>
-          <PaymentTable>
-            <PaymentHeader>
-              <PaymentCell>Month/Year</PaymentCell>
-              <PaymentCell>Due Date</PaymentCell>
-              <PaymentCell>Amount</PaymentCell>
-              <PaymentCell>Status</PaymentCell>
-              <PaymentCell>Paid Date</PaymentCell>
-              <PaymentCell>Actions</PaymentCell>
-            </PaymentHeader>
+          <MetricGrid>
+            <MetricCard>
+              <span>Collected</span>
+              <strong>Rs. {formatCurrency(totalPaid)}</strong>
+            </MetricCard>
+            <MetricCard>
+              <span>Pending</span>
+              <strong>Rs. {formatCurrency(totalPending)}</strong>
+            </MetricCard>
+            <MetricCard>
+              <span>Next due</span>
+              <strong>{paymentState.dueDate ? formatDisplayDate(paymentState.dueDate) : "Not set"}</strong>
+            </MetricCard>
+          </MetricGrid>
 
-            {tenant.payments
-            .filter((payment) => new Date(payment.dueDate) < new Date())
-            .sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate)) // Sort by newest first
-            .map((payment) => (
-              <PaymentRow key={payment._id}>
-                <PaymentCell data-label="Month/Year">{payment.month}</PaymentCell>
-                <PaymentCell data-label="Due Date">{formatDate(payment.dueDate)}</PaymentCell>
-                <PaymentCell data-label="Amount">₹{payment.amount.toLocaleString()}</PaymentCell>
-                <PaymentCell data-label="Status">
-                  <PaymentStatus status={payment.status}>
-                    {payment.status}
-                  </PaymentStatus>
-                </PaymentCell>
-                <PaymentCell data-label="Paid Date">{formatDate(payment.paidDate)}</PaymentCell>
-                <PaymentCell data-label="Actions">
-                  <PaymentActions>
-                    {payment.status === "Unpaid" ? (
-                      <PaymentButton
-                        color="success"
-                        onClick={() => handleMarkPaid(payment._id)}
-                        title="Mark as Paid"
-                      >
-                        <FontAwesomeIcon icon={faCheck} />
-                      </PaymentButton>
-                    ) : (
-                      <PaymentButton
-                        color="error"
-                        onClick={() => handleMarkUnpaid(payment._id)}
-                        title="Mark as Unpaid"
-                      >
-                        <FontAwesomeIcon icon={faTimes} />
-                      </PaymentButton>
-                    )}
-                  </PaymentActions>
-                </PaymentCell>
-              </PaymentRow>
+          <PaymentGrid>
+            {payments.map((payment, index) => (
+              <PaymentCard
+                key={payment._id}
+                as={motion.article}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.28, delay: index * 0.03 }}
+              >
+                <div>
+                  <PaymentTitle>{payment.month}</PaymentTitle>
+                  <PaymentMeta>
+                    <FontAwesomeIcon icon={faCalendarDay} />
+                    Due {formatDisplayDate(payment.dueDate)}
+                  </PaymentMeta>
+                  <PaymentMeta>
+                    <FontAwesomeIcon icon={faWallet} />
+                    Rs. {formatCurrency(payment.amount)}
+                  </PaymentMeta>
+                </div>
+
+                <div>
+                  <PaymentStatus status={payment.status}>{payment.status}</PaymentStatus>
+                  <PaymentMeta>
+                    {payment.paidDate
+                      ? `Paid on ${formatDisplayDate(payment.paidDate)}`
+                      : "Not cleared yet"}
+                  </PaymentMeta>
+                </div>
+
+                <ActionRow>
+                  {payment.status === "Paid" ? (
+                    <ActionButton type="button" $tone="ghost" onClick={() => onMarkUnpaid(tenant._id, payment._id)}>
+                      <FontAwesomeIcon icon={faRotateLeft} />
+                      Mark unpaid
+                    </ActionButton>
+                  ) : (
+                    <ActionButton type="button" $tone="primary" onClick={() => onMarkPaid(tenant._id, payment._id)}>
+                      <FontAwesomeIcon icon={faCheck} />
+                      Mark paid
+                    </ActionButton>
+                  )}
+                </ActionRow>
+              </PaymentCard>
             ))}
-          </PaymentTable>
+          </PaymentGrid>
         </ModalBody>
 
         <ModalActions>
-          <Button type="secondary" onClick={onClose}>
+          <ActionButton type="button" $tone="ghost" onClick={onClose}>
             Close
-          </Button>
+          </ActionButton>
         </ModalActions>
       </ModalContent>
     </Modal>

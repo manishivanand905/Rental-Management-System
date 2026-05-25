@@ -1,23 +1,59 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import {
+  faArrowTrendUp,
+  faBell,
+  faMoon,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  BrandBlock,
+  BrandEyebrow,
+  BrandTitle,
+  HeaderActions,
   HeaderContainer,
-  HeaderTitle,
+  HeaderMeta,
+  HeaderNav,
+  LiveBadge,
+  NavButton,
   ThemeToggle,
-  UserInfo,
 } from "./headerStyles";
 
-const Header = ({ theme, toggleTheme, userId }) => {
+const Header = ({ theme, toggleTheme, onJump }) => {
+  const navItems = [
+    { id: "overview", label: "Overview" },
+    { id: "tenants", label: "Tenants" },
+    { id: "payments", label: "Payments" },
+  ];
+
   return (
     <HeaderContainer>
-      <HeaderTitle>Rental Management</HeaderTitle>
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-        <ThemeToggle onClick={toggleTheme}>
+      <BrandBlock>
+        <BrandEyebrow>Rental</BrandEyebrow>
+        <BrandTitle>RentEell</BrandTitle>
+      </BrandBlock>
+
+      <HeaderNav>
+        {navItems.map((item) => (
+          <NavButton key={item.id} onClick={() => onJump(item.id)}>
+            {item.label}
+          </NavButton>
+        ))}
+      </HeaderNav>
+
+      <HeaderActions>
+        <LiveBadge>
+          <FontAwesomeIcon icon={faArrowTrendUp} />
+          Overview
+        </LiveBadge>
+        <HeaderMeta>
+          <FontAwesomeIcon icon={faBell} />
+          Alerts
+        </HeaderMeta>
+        <ThemeToggle onClick={toggleTheme} aria-label="Toggle theme">
           <FontAwesomeIcon icon={theme === "light" ? faMoon : faSun} />
         </ThemeToggle>
-        <UserInfo>User ID: {userId}</UserInfo>
-      </div>
+      </HeaderActions>
     </HeaderContainer>
   );
 };

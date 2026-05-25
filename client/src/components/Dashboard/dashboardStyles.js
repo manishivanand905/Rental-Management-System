@@ -1,310 +1,320 @@
+import styled from "styled-components";
 
-import styled, { keyframes } from "styled-components";
+const toneStyles = {
+  primary: {
+    bg: "rgba(99, 102, 241, 0.16)",
+    color: "#8B90FF",
+  },
+  success: {
+    bg: "rgba(34, 197, 94, 0.16)",
+    color: "#4ADE80",
+  },
+  danger: {
+    bg: "rgba(239, 68, 68, 0.16)",
+    color: "#FB7185",
+  },
+  info: {
+    bg: "rgba(6, 182, 212, 0.16)",
+    color: "#22D3EE",
+  },
+};
 
-// Animation keyframes
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+const getTone = (tone, key) => toneStyles[tone]?.[key] || toneStyles.primary[key];
+
+export const DashboardContainer = styled.section`
+  display: grid;
+  gap: 1.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 1rem;
   }
 `;
 
-// Container
-export const DashboardContainer = styled.div`
-  padding: 2rem;
+export const InsightGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding: 1.5rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
-    padding: 0.8rem;
+    grid-template-columns: 1fr;
   }
 `;
 
-// Grid Layout
-export const DashboardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    grid-template-columns: 1fr; /* Single column on small screens */
-    gap: 1rem;
-  }
-`;
-
-// Card Component
-export const DashboardCard = styled.div`
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  box-shadow: ${({ theme }) => theme.shadow};
+export const InsightCard = styled.article`
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
-  animation: ${fadeIn} 0.4s ease-out;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
-    flex-direction: column; /* Stack icon and content vertically */
-    text-align: center;
-    padding: 1rem;
-    gap: 0.8rem;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 12px;
-    padding: 2px;
-    background: ${({ theme, color }) => {
-      switch (color) {
-        case "success":
-          return `linear-gradient(to right, ${theme.success}, ${theme.primary})`;
-        case "warning":
-          return `linear-gradient(to right, ${theme.warning}, ${theme.error})`;
-        case "error":
-          return `linear-gradient(to right, ${theme.error}, ${theme.warning})`;
-        case "info":
-          return `linear-gradient(to right, ${theme.primary}, ${theme.success})`;
-        default:
-          return `linear-gradient(to right, ${theme.primary}, ${theme.success})`;
-      }
-    }};
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0.5;
-    transition: all 0.3s ease-in-out;
-  }
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadowHover};
-    &::before {
-      opacity: 1;
-    }
-  }
-`;
-
-// Icon Container
-export const CardIcon = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: white;
-  background: ${({ theme, color }) => {
-    switch (color) {
-      case "success":
-        return theme.success;
-      case "warning":
-        return theme.warning;
-      case "error":
-        return theme.error;
-      case "info":
-        return theme.primary;
-      default:
-        return theme.primary;
-    }
-  }};
-`;
-
-// Content Container
-export const CardContent = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-`;
-
-// Card Title
-export const CardTitle = styled.h3`
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.textSecondary};
-  text-transform: uppercase;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 0.8rem;
-  }
-`;
-
-// Card Value
-export const CardValue = styled.p`
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.text};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1.5rem;
-  }
-`;
-
-// Card Subtitle
-export const CardSubtitle = styled.span`
-  font-size: 0.8rem;
-  color: ${({ theme, color }) => {
-    switch (color) {
-      case "success":
-        return theme.success;
-      case "warning":
-        return theme.warning;
-      case "error":
-        return theme.error;
-      case "info":
-        return theme.primary;
-      default:
-        return theme.textMuted;
-    }
-  }};
-  font-weight: 500;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 0.7rem;
-  }
-`;
-
-// Additional Info Grid
-export const AdditionalInfoGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
+  padding: 1.35rem;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: ${({ theme }) => theme.cardBackground};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
+  box-shadow: ${({ theme }) => theme.shadows.soft};
+  backdrop-filter: blur(18px);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    grid-template-columns: 1fr; /* Single column on small screens */
-    gap: 1rem;
+    gap: 0.75rem;
+    padding: 1rem;
   }
 `;
 
-// Info Card
-export const InfoCard = styled.div`
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+export const InsightAccent = styled.div`
+  position: absolute;
+  inset: auto auto -2.5rem -2rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 999px;
+  background: ${({ tone }) => getTone(tone, "bg")};
+  filter: blur(8px);
+`;
+
+export const InsightIcon = styled.div`
+  position: relative;
+  width: 3.25rem;
+  height: 3.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: 1rem;
+  background: ${({ tone }) => getTone(tone, "bg")};
+  color: ${({ tone }) => getTone(tone, "color")};
+  font-size: 1.2rem;
+`;
+
+export const InsightLabel = styled.p`
+  position: relative;
+  z-index: 1;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.textMuted};
+  font-weight: 700;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.72rem;
+  }
+`;
+
+export const InsightValue = styled.h3`
+  position: relative;
+  z-index: 1;
+  margin-top: 0.25rem;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.9rem, 3vw, 2.35rem);
+  color: ${({ theme }) => theme.text};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 1.55rem;
+  }
+`;
+
+export const InsightMeta = styled.p`
+  position: relative;
+  z-index: 1;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.92rem;
+  line-height: 1.55;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;
+
+export const AlertGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const SummaryCard = styled.article`
   padding: 1.5rem;
-  box-shadow: ${({ theme }) => theme.shadow};
-  border: 1px solid ${({ theme }) => theme.border};
-  animation: ${fadeIn} 0.6s ease-out;
+  border-radius: ${({ theme }) => theme.radii.xl};
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent),
+    ${({ theme }) => theme.cardBackgroundStrong};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
+  box-shadow: ${({ theme }) => theme.shadows.strong};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 1rem;
+    border-radius: ${({ theme }) => theme.radii.lg};
+  }
 `;
 
-// Info Card Header
-export const InfoCardHeader = styled.div`
+export const AlertCard = styled(SummaryCard)`
+  display: grid;
+  gap: 1rem;
+`;
+
+export const SummaryHeader = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1rem;
-  color: ${({ theme }) => theme.text};
-  font-weight: 600;
-  font-size: 1.1rem;
+  color: ${({ theme }) => theme.accent};
 
   svg {
-    color: ${({ theme }) => theme.primary};
-    font-size: 1.25rem;
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-bottom: 0.75rem;
   }
 `;
 
-// Info Card Content
-export const InfoCardContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
+export const AlertTitle = styled.h3`
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.text};
 
-// Info Row
-export const InfoRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  span {
-    color: ${({ theme }) => theme.textSecondary};
-    font-size: 0.9rem;
-  }
-
-  strong {
-    color: ${({ theme }) => theme.text};
-    font-weight: 600;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 1rem;
   }
 `;
 
-// Collection Bar
-export const CollectionBar = styled.div`
-  width: 100%;
-  height: 8px;
-  background: ${({ theme }) => theme.inputBackground};
-  border-radius: 4px;
-  overflow: hidden;
-`;
+export const AlertMeta = styled.p`
+  margin-top: 0.35rem;
+  color: ${({ theme }) => theme.textSecondary};
+  line-height: 1.55;
 
-// Collection Progress
-export const CollectionProgress = styled.div`
-  height: 100%;
-  width: ${(props) => props.width}%;
-  background: ${(props) => props.color};
-  transition: width 0.5s ease-in-out;
-  border-radius: 4px;
-`;
-
-// Occupancy Rate
-export const OccupancyRate = styled.div`
-  text-align: center;
-  padding: 1rem 0;
-`;
-
-// Occupancy Number
-export const OccupancyNumber = styled.div`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.primary};
-  margin-bottom: 0.5rem;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 2rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.85rem;
   }
 `;
 
-// Occupancy Text
-export const OccupancyText = styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textSecondary};
+export const SummaryMetric = styled.div`
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(2.8rem, 6vw, 4.4rem);
+  line-height: 1;
+  color: ${({ theme }) => theme.text};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 2.2rem;
+  }
+`;
+
+export const SummaryProgress = styled.div`
+  margin-top: 1.35rem;
+  height: 0.8rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.surfaceMuted};
+  overflow: hidden;
+`;
+
+export const SummaryProgressBar = styled.div`
+  height: 100%;
+  width: ${({ width }) => width}%;
+  background: ${({ theme }) => theme.gradients.hero};
+  border-radius: inherit;
+`;
+
+export const SummaryTimeline = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: ${({ theme }) => theme.textSecondary};
+  flex-wrap: wrap;
+
+  strong {
+    color: ${({ theme }) => theme.text};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.82rem;
+  }
+`;
+
+export const SpotlightGrid = styled.div``;
+
+export const SpotlightCard = styled.div`
+  padding: 1rem 1.05rem;
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.85rem 0.9rem;
+  }
+`;
+
+export const SpotlightHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    gap: 0.55rem;
+  }
+`;
+
+export const SpotlightTitle = styled.h4`
+  color: ${({ theme }) => theme.text};
+  font-size: 0.98rem;
+  font-weight: 700;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 0.9rem;
+  }
+`;
+
+export const SpotlightSubtitle = styled.p`
+  margin-top: 0.2rem;
+  color: ${({ theme }) => theme.textMuted};
+  font-size: 0.86rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.78rem;
+  }
+`;
+
+export const SpotlightStatus = styled.span`
+  padding: 0.45rem 0.7rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ tone, theme }) => {
+    if (tone === "danger") return theme.errorSoft;
+    if (tone === "warning") return theme.warningSoft;
+    if (tone === "success") return theme.successSoft;
+    return theme.infoSoft;
+  }};
+  color: ${({ tone, theme }) => {
+    if (tone === "danger") return theme.error;
+    if (tone === "warning") return theme.warning;
+    if (tone === "success") return theme.success;
+    return theme.accent;
+  }};
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.38rem 0.55rem;
+    font-size: 0.66rem;
+  }
+`;
+
+export const SpotlightAmount = styled.div`
+  margin: 0.9rem 0 0.45rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.35rem;
+  color: ${({ theme }) => theme.text};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 1.08rem;
   }
 `;

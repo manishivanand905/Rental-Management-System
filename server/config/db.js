@@ -1,17 +1,25 @@
+const dns = require('node:dns');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
+  const mongoUri = process.env.MONGO_URI;
+
+  if (!mongoUri) {
+    throw new Error('MONGO_URI is not set in the server .env file');
   }
+
+  if (mongoUri.startsWith('mongodb+srv://')) {
+    const dnsServers = (process.env.MONGODB_DNS_SERVERS || '8.8.8.8,1.1.1.1')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    dns.setServers(dnsServers);
+  }
+
+  await mongoose.connect(mongoUri);
+  console.log('MongoDB connected');
 };
 
 module.exports = connectDB;

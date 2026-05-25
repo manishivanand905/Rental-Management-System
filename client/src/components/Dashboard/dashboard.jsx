@@ -1,211 +1,170 @@
 import React from "react";
+import CountUp from "react-countup";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHome,
-  faDollarSign,
-  faCalendarAlt,
-  faExclamationTriangle,
+  faBolt,
+  faBuildingCircleCheck,
+  faCircleExclamation,
+  faCoins,
+  faWandMagicSparkles,
+  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  AlertCard,
+  AlertGrid,
+  AlertMeta,
+  AlertTitle,
   DashboardContainer,
-  DashboardGrid,
-  DashboardCard,
-  CardIcon,
-  CardContent,
-  CardTitle,
-  CardValue,
-  CardSubtitle,
-  AdditionalInfoGrid,
-  InfoCard,
-  InfoCardHeader,
-  InfoCardContent,
-  InfoRow,
-  CollectionBar,
-  CollectionProgress,
-  OccupancyRate,
-  OccupancyNumber,
-  OccupancyText,
+  InsightAccent,
+  InsightCard,
+  InsightGrid,
+  InsightIcon,
+  InsightLabel,
+  InsightMeta,
+  InsightValue,
+  SpotlightAmount,
+  SpotlightCard,
+  SpotlightHeader,
+  SpotlightStatus,
+  SpotlightSubtitle,
+  SpotlightTitle,
+  SummaryCard,
+  SummaryHeader,
+  SummaryMetric,
+  SummaryProgress,
+  SummaryProgressBar,
+  SummaryTimeline,
 } from "./dashboardStyles";
+import {
+  formatCurrency,
+  formatDisplayDate,
+  getDashboardInsights,
+} from "../../utils/tenantInsights";
+
+const cardMotion = {
+  hidden: { opacity: 0, y: 28 },
+  show: (index) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: index * 0.08 },
+  }),
+};
 
 const Dashboard = ({ tenants }) => {
-  const totalRooms = 9;
-  const occupiedRooms = tenants.filter(
-    (tenant) => tenant.status === "Active"
-  ).length;
-  const vacantRooms = totalRooms - occupiedRooms;
+  const insights = getDashboardInsights(tenants);
 
-  // Calculate current month's rent balance (remaining amount to be collected)
-  const getCurrentMonthRentBalance = () => {
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-
-    let totalExpected = 0;
-    let totalCollected = 0;
-
-    tenants.forEach((tenant) => {
-      if (tenant.status === "Active") {
-        // Find current month payment
-        const currentMonthPayment = tenant.payments.find((payment) => {
-          const paymentDate = new Date(payment.dueDate);
-          return (
-            paymentDate.getMonth() === currentMonth &&
-            paymentDate.getFullYear() === currentYear
-          );
-        });
-
-        // Expected amount for this month
-        const expectedAmount = currentMonthPayment
-          ? currentMonthPayment.amount
-          : tenant.rentAmount;
-
-        totalExpected += expectedAmount;
-
-        // Collected amount for this month (only if paid)
-        if (currentMonthPayment && currentMonthPayment.status === "Paid") {
-          totalCollected += currentMonthPayment.amount;
-        }
-      }
-    });
-
-    return {
-      remaining: totalExpected - totalCollected,
-      expected: totalExpected,
-      collected: totalCollected,
-      collectionRate:
-        totalExpected > 0 ? (totalCollected / totalExpected) * 100 : 0,
-    };
-  };
-
-  // Calculate expected rent for this month
-  const expectedThisMonth = tenants.reduce((total, tenant) => {
-    if (tenant.status === "Active") {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      const currentMonthPayment = tenant.payments.find((payment) => {
-        const paymentDate = new Date(payment.dueDate);
-        return (
-          paymentDate.getMonth() === currentMonth &&
-          paymentDate.getFullYear() === currentYear
-        );
-      });
-      return (
-        total +
-        (currentMonthPayment ? currentMonthPayment.amount : tenant.rentAmount)
-      );
-    }
-    return total;
-  }, 0);
-
-  const rentBalance = getCurrentMonthRentBalance();
-
-  const dashboardData = [
+  const insightCards = [
     {
-      title: "Occupied Rooms",
-      value: occupiedRooms,
-      icon: faHome,
-      color: "success",
+      label: "Monthly expected",
+      value: insights.monthlyExpected,
+      tone: "primary",
+      icon: faWallet,
+      prefix: "Rs. ",
+      meta: `${insights.activeTenants} active`,
     },
     {
-      title: "Vacant Rooms",
-      value: vacantRooms,
-      icon: faHome,
-      color: "warning",
+      label: "Collected",
+      value: insights.collectedThisMonth,
+      tone: "success",
+      icon: faCoins,
+      prefix: "Rs. ",
+      meta: `${insights.collectionRate}% rate`,
     },
     {
-      title: "Rent Balance",
-      value: `₹${rentBalance.remaining.toLocaleString()}`,
-      subtitle: `${rentBalance.collectionRate.toFixed(1)}% collected`,
-      icon: faDollarSign,
-      color: rentBalance.remaining > 0 ? "error" : "success",
+      label: "Overdue",
+      value: insights.overdueAmount,
+      tone: "danger",
+      icon: faCircleExclamation,
+      prefix: "Rs. ",
+      meta: `${insights.dueTodayCount} due today`,
     },
     {
-      title: "Expected This Month",
-      value: `₹${expectedThisMonth.toLocaleString()}`,
-      subtitle: `Total: ₹${rentBalance.expected.toLocaleString()}`,
-      icon: faCalendarAlt,
-      color: "info",
+      label: "Rooms",
+      value: insights.occupiedRooms,
+      tone: "info",
+      icon: faBuildingCircleCheck,
+      prefix: "",
+      meta: `${insights.inactiveTenants} inactive`,
     },
   ];
 
   return (
-    <DashboardContainer>
-      <DashboardGrid>
-        {dashboardData.map((item, index) => (
-          <DashboardCard key={index} color={item.color} className="fade-in">
-            <CardIcon color={item.color}>
-              <FontAwesomeIcon icon={item.icon} />
-            </CardIcon>
-            <CardContent>
-              <CardTitle>{item.title}</CardTitle>
-              <CardValue>{item.value}</CardValue>
-              {item.subtitle && (
-                <CardSubtitle color={item.color}>{item.subtitle}</CardSubtitle>
-              )}
-            </CardContent>
-          </DashboardCard>
+    <DashboardContainer id="overview">
+      <InsightGrid>
+        {insightCards.map((card, index) => (
+          <InsightCard
+            key={card.label}
+            as={motion.article}
+            variants={cardMotion}
+            initial="hidden"
+            animate="show"
+            custom={index}
+            tone={card.tone}
+          >
+            <InsightAccent tone={card.tone} />
+            <InsightIcon tone={card.tone}>
+              <FontAwesomeIcon icon={card.icon} />
+            </InsightIcon>
+            <div>
+              <InsightLabel>{card.label}</InsightLabel>
+              <InsightValue>
+                {card.prefix}
+                <CountUp end={card.value} duration={1.4} separator="," />
+              </InsightValue>
+              <InsightMeta>{card.meta}</InsightMeta>
+            </div>
+          </InsightCard>
         ))}
-      </DashboardGrid>
+      </InsightGrid>
 
-      {/* Additional Info Cards */}
-      <AdditionalInfoGrid>
-        <InfoCard>
-          <InfoCardHeader>
-            <FontAwesomeIcon icon={faExclamationTriangle} />
-            <span>Collection Summary</span>
-          </InfoCardHeader>
-          <InfoCardContent>
-            <InfoRow>
-              <span>Total Expected:</span>
-              <strong>₹{rentBalance.expected.toLocaleString()}</strong>
-            </InfoRow>
-            <InfoRow>
-              <span>Total Collected:</span>
-              <strong style={{ color: "#48bb78" }}>
-                ₹{rentBalance.collected.toLocaleString()}
-              </strong>
-            </InfoRow>
-            <InfoRow>
-              <span>Remaining Balance:</span>
-              <strong
-                style={{
-                  color: rentBalance.remaining > 0 ? "#f56565" : "#48bb78",
-                }}
-              >
-                ₹{rentBalance.remaining.toLocaleString()}
-              </strong>
-            </InfoRow>
-            <CollectionBar>
-              <CollectionProgress
-                width={rentBalance.collectionRate}
-                color={
-                  rentBalance.collectionRate > 80
-                    ? "#48bb78"
-                    : rentBalance.collectionRate > 50
-                    ? "#ed8936"
-                    : "#f56565"
-                }
-              />
-            </CollectionBar>
-          </InfoCardContent>
-        </InfoCard>
+      <AlertGrid>
+        <SummaryCard as={motion.section} variants={cardMotion} initial="hidden" animate="show" custom={4}>
+          <SummaryHeader>
+            <div>
+              <AlertTitle>Collection</AlertTitle>
+              <AlertMeta>This month.</AlertMeta>
+            </div>
+            <FontAwesomeIcon icon={faWandMagicSparkles} />
+          </SummaryHeader>
+          <SummaryMetric>{insights.collectionRate}%</SummaryMetric>
+          <SummaryProgress>
+            <SummaryProgressBar width={insights.collectionRate} />
+          </SummaryProgress>
+          <SummaryTimeline>
+            <span>Upcoming: {insights.upcomingCount}</span>
+            <strong>Rs. {formatCurrency(insights.monthlyExpected - insights.collectedThisMonth)}</strong>
+          </SummaryTimeline>
+        </SummaryCard>
 
-        <InfoCard>
-          <InfoCardHeader>
-            <FontAwesomeIcon icon={faHome} />
-            <span>Occupancy Rate</span>
-          </InfoCardHeader>
-          <InfoCardContent>
-            <OccupancyRate>
-              <OccupancyNumber>
-                {((occupiedRooms / totalRooms) * 100).toFixed(1)}%
-              </OccupancyNumber>
-              <OccupancyText>
-                {occupiedRooms} of {totalRooms} rooms occupied
-              </OccupancyText>
-            </OccupancyRate>
-          </InfoCardContent>
-        </InfoCard>
-      </AdditionalInfoGrid>
+        <AlertCard as={motion.section} variants={cardMotion} initial="hidden" animate="show" custom={5}>
+          <SummaryHeader>
+            <div>
+              <AlertTitle>Priority</AlertTitle>
+              <AlertMeta>Needs attention.</AlertMeta>
+            </div>
+            <FontAwesomeIcon icon={faBolt} />
+          </SummaryHeader>
+          {insights.spotlight.slice(0, 3).map((item) => (
+            <SpotlightCard key={item.id}>
+              <SpotlightHeader>
+                <div>
+                  <SpotlightTitle>
+                    Room {item.roomNo} - {item.name}
+                  </SpotlightTitle>
+                  <SpotlightSubtitle>
+                    {item.dueDate ? formatDisplayDate(item.dueDate) : "No due date"}
+                  </SpotlightSubtitle>
+                </div>
+                <SpotlightStatus tone={item.tone}>{item.label}</SpotlightStatus>
+              </SpotlightHeader>
+              <SpotlightAmount>Rs. {formatCurrency(item.amount)}</SpotlightAmount>
+              <InsightMeta>{item.detail}</InsightMeta>
+            </SpotlightCard>
+          ))}
+          {insights.spotlight.length === 0 && <InsightMeta>No tenant data.</InsightMeta>}
+        </AlertCard>
+      </AlertGrid>
     </DashboardContainer>
   );
 };

@@ -1,119 +1,98 @@
-
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap");
+
+  :root {
+    color-scheme: ${({ theme }) => theme.mode};
+  }
 
   * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
 
   html {
-    font-size: 16px; /* Base font size */
-
-    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-      font-size: 15px;
-    }
-
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-      font-size: 14px;
-    }
+    scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: ${({ theme }) => theme.text};
+    background:
+      radial-gradient(circle at top left, rgba(99, 102, 241, 0.26), transparent 26%),
+      radial-gradient(circle at top right, rgba(6, 182, 212, 0.18), transparent 22%),
+      radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.12), transparent 20%),
+      linear-gradient(180deg, ${({ theme }) => theme.backgroundSecondary} 0%, ${({ theme }) => theme.background} 45%, ${({ theme }) => theme.background} 100%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: ${({ theme }) => theme.background};
-    background-image: url('https://images.unsplash.com/photo-1507525428034-b723a9ce6890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* Default for larger screens */
-    color: ${({ theme }) => theme.text};
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-      background-attachment: scroll; /* Change to scroll on small screens */
-      background-image: none; /* Optionally remove background image on very small screens */
-      background-color: ${({ theme }) => theme.background}; /* Ensure background color is visible */
-    }
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: auto;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(80px);
+    opacity: 0.62;
+  }
+
+  body::before {
+    top: -6rem;
+    left: -2rem;
+    width: 18rem;
+    height: 18rem;
+    background: rgba(99, 102, 241, 0.28);
+  }
+
+  body::after {
+    right: -4rem;
+    top: 10rem;
+    width: 22rem;
+    height: 22rem;
+    background: rgba(6, 182, 212, 0.18);
   }
 
   #root {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
   }
 
   button {
-    font-family: inherit;
+    border: 0;
     cursor: pointer;
-    border: none;
-    outline: none;
-    transition: all 0.2s ease-in-out;
   }
 
-  input {
-    font-family: inherit;
-    outline: none;
-    border: none;
-    transition: all 0.2s ease-in-out;
+  input,
+  select,
+  textarea {
+    border: 0;
+    outline: 0;
+    background: transparent;
   }
 
-  input:focus {
-    outline: none;
+  img {
+    display: block;
+    max-width: 100%;
   }
 
-  .fade-in {
-    animation: fadeIn 0.4s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .slide-down {
-    animation: slideDown 0.4s ease-in-out;
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .scale-in {
-    animation: scaleIn 0.3s ease-in-out;
-  }
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  code {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  ::selection {
+    background: rgba(99, 102, 241, 0.28);
   }
 `;

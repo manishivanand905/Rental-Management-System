@@ -4,6 +4,7 @@
   "description": "Backend for the rental management application.",
   "main": "server.js",
   "scripts": {
+    "postinstall": "node scripts/fix-tr46-punycode.js",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },

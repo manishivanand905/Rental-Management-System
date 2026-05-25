@@ -2,245 +2,196 @@ import styled from "styled-components";
 
 export const Modal = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
   padding: 1rem;
 `;
 
 export const ModalOverlay = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: ${({ theme }) => theme.modalOverlay};
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(12px);
 `;
 
 export const ModalContent = styled.div`
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.shadowHover};
-  border: 1px solid ${({ theme }) => theme.border};
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  width: min(1040px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  border-radius: ${({ theme }) => theme.radii.xl};
+  background: ${({ theme }) => theme.cardBackgroundStrong};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
+  box-shadow: ${({ theme }) => theme.shadows.strong};
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const ModalHeader = styled.div`
+  position: relative;
   padding: 1.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.border};
 `;
 
 export const ModalTitle = styled.h2`
+  font-family: "Poppins", sans-serif;
   color: ${({ theme }) => theme.text};
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
+  font-size: 1.35rem;
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.text};
+
+  svg {
+    font-size: 1rem;
+  }
 `;
 
 export const ModalBody = styled.div`
   padding: 1.5rem;
-  overflow-y: auto;
-
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 `;
 
 export const ModalActions = styled.div`
-  padding: 1rem 1.5rem;
-  border-top: 1px solid ${({ theme }) => theme.border};
+  padding: 1rem 1.5rem 1.4rem;
   display: flex;
   justify-content: flex-end;
+  border-top: 1px solid ${({ theme }) => theme.border};
+`;
+
+export const MetricGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const MetricCard = styled.div`
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+
+  span {
+    display: block;
+    color: ${({ theme }) => theme.textMuted};
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  strong {
+    color: ${({ theme }) => theme.text};
+    font-family: "Poppins", sans-serif;
+    font-size: 1.35rem;
+  }
+`;
+
+export const PaymentGrid = styled.div`
+  display: grid;
+  gap: 0.7rem;
+`;
+
+export const PaymentCard = styled.article`
+  display: grid;
+  grid-template-columns: 1.2fr 0.85fr auto;
   gap: 0.75rem;
-`;
+  align-items: center;
+  padding: 0.8rem 0.9rem;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
 
-export const Button = styled.button`
-  padding: 0.6rem 1.2rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  ${({ type, theme }) => {
-    switch (type) {
-      case "primary":
-        return `
-          background: ${theme.primary};
-          color: white;
-          border-color: ${theme.primary};
-          &:hover {
-            background: ${theme.primaryHover};
-            border-color: ${theme.primaryHover};
-          }
-        `;
-      case "secondary":
-        return `
-          background: ${theme.cardBackground};
-          color: ${theme.text};
-          border-color: ${theme.border};
-          &:hover {
-            background: ${theme.inputBackground};
-          }
-        `;
-      case "error":
-        return `
-          background: ${theme.error};
-          color: white;
-          border-color: ${theme.error};
-          &:hover {
-            background: ${theme.errorHover};
-            border-color: ${theme.errorHover};
-          }
-        `;
-      default:
-        return `
-          background: ${theme.primary};
-          color: white;
-          border-color: ${theme.primary};
-          &:hover {
-            background: ${theme.primaryHover};
-            border-color: ${theme.primaryHover};
-          }
-        `;
-    }
-  }}
-`;
-
-export const PaymentTable = styled.div`
-  overflow-x: auto;
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`;
-
-export const PaymentHeader = styled.div`
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr;
-  background: ${({ theme }) => theme.inputBackground};
-  border-bottom: 1px solid ${({ theme }) => theme.border};
-  padding: 0.75rem 0;
-  font-weight: 600;
-  color: ${({ theme }) => theme.textSecondary};
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-
-  @media (max-width: 768px) {
-    display: none; /* Hide header on small screens */
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
   }
 `;
 
-export const PaymentRow = styled.div`
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr;
-  border-bottom: 1px solid ${({ theme }) => theme.border};
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  @media (max-width: 768px) {
-    display: block; /* Stack items vertically */
-    margin-bottom: 1rem;
-    border: 1px solid ${({ theme }) => theme.border};
-    border-radius: 8px;
-    padding: 0.75rem;
-  }
-`;
-
-export const PaymentCell = styled.div`
-  padding: 0.75rem;
+export const PaymentTitle = styled.h3`
   color: ${({ theme }) => theme.text};
-  font-size: 0.9rem;
+  font-size: 0.96rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+`;
+
+export const PaymentMeta = styled.p`
   display: flex;
   align-items: center;
+  gap: 0.45rem;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.85rem;
+  line-height: 1.4;
 
-  @media (max-width: 768px) {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed ${({ theme }) => theme.border};
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &::before {
-      content: attr(data-label) ":";
-      font-weight: 600;
-      color: ${({ theme }) => theme.textSecondary};
-      margin-right: 0.5rem;
-    }
+  & + & {
+    margin-top: 0.25rem;
   }
 `;
 
 export const PaymentStatus = styled.span`
-  background: ${({ theme, status }) =>
-    status === "Paid" ? theme.success : theme.error};
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  display: inline-flex;
+  margin-bottom: 0.38rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ status, theme }) => (status === "Paid" ? theme.successSoft : theme.warningSoft)};
+  color: ${({ status, theme }) => (status === "Paid" ? theme.success : theme.warning)};
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 800;
 `;
 
-export const PaymentActions = styled.div`
+export const ActionRow = styled.div`
   display: flex;
-  gap: 0.5rem;
+  justify-content: flex-end;
 `;
 
-export const PaymentButton = styled.button`
-  width: 32px;
-  height: 32px;
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
+export const ActionButton = styled.button`
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  transition: all 0.2s ease-in-out;
-  background: transparent;
-  color: ${({ theme }) => theme.textSecondary};
+  gap: 0.55rem;
+  min-height: 2.5rem;
+  padding: 0.72rem 0.9rem;
+  border-radius: ${({ theme }) => theme.radii.md};
+  font-weight: 700;
+  font-size: 0.86rem;
+  border: 1px solid transparent;
 
-  &:hover {
-    background: ${({ theme }) => theme.inputBackground};
-    color: ${({ theme, color }) => {
-      switch (color) {
-        case "success":
-          return theme.success;
-        case "error":
-          return theme.error;
-        default:
-          return theme.text;
-      }
-    }};
-  }
+  ${({ $tone, theme }) => {
+    if ($tone === "ghost") {
+      return `
+        background: ${theme.surface};
+        color: ${theme.text};
+        border-color: ${theme.border};
+      `;
+    }
+
+    return `
+      background: ${theme.gradients.hero};
+      color: #ffffff;
+      box-shadow: ${theme.shadows.glow};
+    `;
+  }}
 `;

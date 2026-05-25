@@ -1,304 +1,417 @@
+import styled from "styled-components";
 
-import styled, { css, keyframes } from "styled-components";
+export const TenantContainer = styled.section`
+  display: grid;
+  gap: 1.25rem;
 
-// Keyframes
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const shine = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`;
-
-// Keyframes for pulsating glow
-const pulseGlow = keyframes`
-  0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
-  50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
-  100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
-`;
-
-// Base styles for buttons
-const buttonBase = css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  outline: none;
-`;
-
-// Styled Components
-export const TenantContainer = styled.div`
-  padding: 2rem;
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
-`;
-
-export const TenantHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  @media (max-width: 768px) {
-    flex-direction: column;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     gap: 1rem;
-    align-items: stretch;
   }
 `;
 
-export const TenantTitle = styled.h2`
+export const SectionHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+export const SectionEyebrow = styled.span`
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: ${({ theme }) => theme.accent};
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
+`;
+
+export const SectionTitle = styled.h2`
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2.3rem);
   color: ${({ theme }) => theme.text};
-  font-size: 1.8rem;
-  font-weight: 700;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 1.35rem;
+  }
 `;
 
 export const AddButton = styled.button`
-  ${buttonBase}
-  background: linear-gradient(45deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.primaryHover});
-  color: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 50px; /* More curved */
-  padding: 0.4rem 1rem; /* Decreased padding */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.95rem 1.3rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.gradients.hero};
+  color: #f8fbff;
+  font-weight: 700;
+  box-shadow: ${({ theme }) => theme.shadows.glow};
+  transition: transform 0.25s ease;
 
   &:hover {
-    background: linear-gradient(45deg, ${({ theme }) => theme.primaryHover}, ${({ theme }) => theme.primary});
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) scale(1.01);
   }
 
-  svg {
-    font-size: 0.9em; /* Decreased icon size */
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.8rem 1rem;
+    font-size: 0.88rem;
+  }
+`;
+
+export const FilterBar = styled.div`
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: ${({ theme }) => theme.cardBackground};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
+  backdrop-filter: blur(18px);
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 0.8rem;
+    padding: 0.85rem;
+  }
+`;
+
+export const FilterInput = styled.input`
+  width: 100%;
+  padding: 1rem 1.05rem;
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.inputBackground};
+  border: 1px solid ${({ theme }) => theme.inputBorder};
+  color: ${({ theme }) => theme.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.textMuted};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.85rem 0.95rem;
+    font-size: 0.9rem;
+  }
+`;
+
+export const InfoCluster = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 0.5rem;
+  }
+`;
+
+export const BadgePill = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  width: fit-content;
+  gap: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.textSecondary};
+  border: 1px solid ${({ theme }) => theme.border};
+  font-size: 0.82rem;
+  font-weight: 700;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.72rem;
+  }
+`;
+
+export const FilterButton = styled.button`
+  padding: 0.68rem 0.95rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ $active, theme }) => ($active ? theme.gradients.glow : theme.surface)};
+  color: ${({ $active, theme }) => ($active ? "#f8fbff" : theme.textSecondary)};
+  border: 1px solid ${({ $active, theme }) => ($active ? "transparent" : theme.border)};
+  font-weight: 700;
+  transition: transform 0.22s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.55rem 0.72rem;
+    font-size: 0.76rem;
   }
 `;
 
 export const CardsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    grid-template-columns: 1fr; /* Single column on small screens */
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
   }
 `;
 
-export const TenantCard = styled.div`
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: ${({ theme }) => theme.shadow};
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: ${fadeIn} 0.5s ease-out;
-  border: 1px solid ${({ theme }) => theme.border};
+export const TenantCard = styled.article`
+  display: grid;
+  gap: 1rem;
+  padding: 1.15rem;
+  border-radius: ${({ theme }) => theme.radii.xl};
+  background:
+    radial-gradient(circle at top right, ${({ theme, tone }) => {
+      if (tone === "danger") return theme.errorSoft;
+      if (tone === "warning") return theme.warningSoft;
+      if (tone === "success") return theme.successSoft;
+      return theme.infoSoft;
+    }}, transparent 38%),
+    ${({ theme }) => theme.cardBackgroundStrong};
+  border: 1px solid ${({ theme, tone }) => {
+    if (tone === "danger" || tone === "warning") return theme.error;
+    return theme.borderStrong;
+  }};
+  box-shadow: ${({ theme }) => theme.shadows.soft};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 1rem; /* Reduced padding for small screens */
-  }
-
-  &:hover {
-    transform: translateY(-10px) rotate(1deg);
-    box-shadow: ${({ theme }) => theme.shadowHover};
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 0.8rem;
+    padding: 0.95rem;
+    border-radius: ${({ theme }) => theme.radii.lg};
   }
 `;
 
-export const CardHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-`;
-
-export const RoomNumber = styled.div`
-  color: ${({ theme }) => theme.text};
-  font-size: 1.2rem;
-  font-weight: 700;
-  display: flex;
+export const TenantTop = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.9rem;
   align-items: center;
-  gap: 0.5rem;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1rem; /* Smaller font size for small screens */
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.75rem;
+  }
+`;
+
+export const ProfileAvatar = styled.div`
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1.35rem;
+  display: grid;
+  place-items: center;
+  background: ${({ theme }) => theme.gradients.glow};
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 3.15rem;
+    height: 3.15rem;
+    border-radius: 1rem;
+    font-size: 0.95rem;
+  }
+`;
+
+export const ProfileMeta = styled.div`
+  display: grid;
+  gap: 0.28rem;
+
+  h3 {
+    font-family: "Poppins", sans-serif;
+    color: ${({ theme }) => theme.text};
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    h3 {
+      font-size: 1rem;
+    }
+  }
+`;
+
+export const CardMeta = styled.p`
+  color: ${({ theme }) => theme.textSecondary};
+  line-height: 1.5;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.84rem;
   }
 `;
 
 export const StatusBadge = styled.span`
-  background: ${({ theme, status }) =>
-    status === "Active" ? theme.success : theme.warning};
-  color: white;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  justify-self: end;
+  white-space: nowrap;
+  padding: 0.65rem 0.8rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ tone, theme }) => {
+    if (tone === "danger") return theme.errorSoft;
+    if (tone === "warning") return theme.warningSoft;
+    if (tone === "success") return theme.successSoft;
+    return theme.infoSoft;
+  }};
+  color: ${({ tone, theme }) => {
+    if (tone === "danger") return theme.error;
+    if (tone === "warning") return theme.warning;
+    if (tone === "success") return theme.success;
+    return theme.accent;
+  }};
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-`;
 
-export const TenantName = styled.h3`
-  color: ${({ theme }) => theme.text};
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1.4rem; /* Smaller font size for small screens */
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.66rem;
+    justify-self: end;
   }
 `;
 
-export const CardDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-bottom: 1.5rem;
+export const CardBody = styled.div`
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 0.65rem;
+    padding: 0.8rem;
+  }
 `;
 
-export const DetailItem = styled.div`
+export const ValueLine = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: space-between;
+  gap: 1rem;
   color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.95rem;
+  font-size: 0.94rem;
 
-  svg {
-    font-size: 1.1rem;
+  strong {
+    color: ${({ theme }) => theme.text};
+    font-weight: 700;
+    text-align: right;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.84rem;
   }
 `;
 
-export const DetailLabel = styled.span`
+export const TertiaryStat = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: ${({ theme }) => theme.textMuted};
+  font-size: 0.85rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed ${({ theme }) => theme.border};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.76rem;
+  }
+`;
+
+export const MemberChip = styled.span`
+  padding: 0.5rem 0.7rem;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.surfaceMuted};
   color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.9rem;
-`;
-
-export const DetailValue = styled.span`
-  color: ${({ theme }) => theme.text};
-  font-weight: 500;
-`;
-
-export const RentAmount = styled.div`
-  background: ${({ theme }) => theme.background};
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-  border: 1px solid ${({ theme }) => theme.border};
-  margin-top: auto;
-`;
-
-export const RentLabel = styled.div`
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin-bottom: 0.3rem;
-`;
-
-export const RentValue = styled.div`
-  color: ${({ theme }) => theme.primary};
-  font-size: 1.8rem;
+  font-size: 0.8rem;
   font-weight: 700;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1.6rem; /* Smaller font size for small screens */
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0.42rem 0.58rem;
+    font-size: 0.72rem;
   }
 `;
 
-export const ActionGroup = styled.div`
-  display: flex;
-  gap: 0.8rem;
+export const QuickActions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+`;
+
+export const QuickAction = styled.button`
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 1.5rem;
-`;
-
-export const ActionButton = styled.button.attrs((props) => ({
-  style: {
-    background: `linear-gradient(135deg, ${props.theme[props.color]} 20%, ${props.theme[props.color + "Hover"
-    ]} 100%)`, /* Even higher opacity for darker vibrancy */
-  },
-}))`
-  ${buttonBase}
-  color: white; /* Revert text color to white */
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  border-radius: 50px; /* More curved */
-  padding: 0.5rem 1rem; /* Decreased padding */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Stronger default shadow */
-  transition: all 0.3s ease-in-out;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Stronger text shadow for white text */
-  border: 1px solid ${({ theme }) => theme.border}; /* Add a subtle border */
-
-  &:hover {
-    transform: translateY(-5px) scale(1.08);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger pronounced shadow */
-    border: 1px solid rgba(255, 255, 255, 0.7); /* More visible white border on hover */
-    animation: ${pulseGlow} 1.5s infinite alternate;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4), /* More visible shine */
-      transparent
-    );
-    animation: ${shine} 3s infinite;
-  }
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.8rem;
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.text};
+  font-weight: 700;
+  transition: transform 0.22s ease, border-color 0.22s ease;
 
   svg {
-    font-size: 0.9em; /* Decreased icon size */
-    color: white; /* Revert icon color to white */
+    color: ${({ $tone, theme }) => {
+      if ($tone === "payments") return theme.accent;
+      if ($tone === "edit") return theme.warning;
+      if ($tone === "whatsapp") return theme.success;
+      if ($tone === "call") return "#38bdf8";
+      if ($tone === "delete") return theme.error;
+      return theme.text;
+    }};
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: ${({ $tone, theme }) => {
+      if ($tone === "payments") return theme.accent;
+      if ($tone === "edit") return theme.warning;
+      if ($tone === "whatsapp") return theme.success;
+      if ($tone === "call") return "#38bdf8";
+      if ($tone === "delete") return theme.error;
+      return theme.accent;
+    }};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    min-height: 2.5rem;
+    padding: 0.65rem 0.5rem;
+    font-size: 0;
+    gap: 0;
+
+    svg {
+      font-size: 0.95rem;
+    }
   }
 `;
 
 export const EmptyState = styled.div`
+  padding: 3rem 1.5rem;
   text-align: center;
-  padding: 4rem 2rem;
-  color: ${({ theme }) => theme.textMuted};
-  font-size: 1.2rem;
-  background: ${({ theme }) => theme.cardBackground};
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  border: 1px solid ${({ theme }) => theme.border};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  border-radius: ${({ theme }) => theme.radii.xl};
+  background: ${({ theme }) => theme.cardBackgroundStrong};
+  border: 1px solid ${({ theme }) => theme.borderStrong};
 
-  &::before {
-    content: "👥";
-    font-size: 4rem;
-    opacity: 0.6;
+  h3 {
+    font-family: "Poppins", sans-serif;
+    color: ${({ theme }) => theme.text};
+    margin-bottom: 0.55rem;
   }
-`;
 
-export const PhoneNumber = styled.a`
-  color: ${({ theme }) => theme.primary};
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
+  p {
+    color: ${({ theme }) => theme.textSecondary};
+    line-height: 1.65;
+  }
 
-  &:hover {
-    color: ${({ theme }) => theme.primaryHover};
-    text-decoration: underline;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 2rem 1rem;
   }
 `;
