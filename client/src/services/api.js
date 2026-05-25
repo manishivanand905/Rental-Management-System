@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-const configuredBaseUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000/api';
-const normalizedBaseUrl = configuredBaseUrl.replace(/\/+$/, '');
+const ensureApiBaseUrl = (value) => {
+  const trimmedValue = String(value || 'http://localhost:5000/api').replace(/\/+$/, '');
+  return /\/api$/i.test(trimmedValue) ? trimmedValue : `${trimmedValue}/api`;
+};
+
+const normalizedBaseUrl = ensureApiBaseUrl(process.env.REACT_APP_SERVER_URL);
 
 const instance = axios.create({
   baseURL: normalizedBaseUrl,
